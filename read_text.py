@@ -1,3 +1,5 @@
+import sys
+
 class ChargerReportParser:
     def __init__(self, file_path):
         # Initialize with the input file path
@@ -42,7 +44,11 @@ class ChargerReportParser:
         # Return parsed station IDs and charger details
         return self.station_ids, self.charger_details
 
-filename = input("Enter the name of the text file: ")
+if len(sys.argv) != 2:
+    print("Usage: python read_text.py <input_file_path>")
+    sys.exit(1)
+
+filename = sys.argv[1]
 
 # Create an instance of the parser class
 parser = ChargerReportParser(filename)
