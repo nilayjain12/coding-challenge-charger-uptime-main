@@ -22,7 +22,7 @@ Then activate the virtual environment by following the code, in the terminal:
 \<name_of_environment>\Scripts\activate
 ```
 ### Step - 4:
-Run the below command in the **terminal/command** line by providing the input file name or path to run the program:
+Run the below command in the **terminal/command line** by providing the input file name or path to run the program:
 ```
 python main.py <input_file_name>
 ```
