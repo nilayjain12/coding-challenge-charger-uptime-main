@@ -1,44 +1,60 @@
+class ChargerReportParser:
+    def __init__(self, file_path):
+        # Initialize with the input file path
+        self.file_path = file_path
+        self.content = []
+        self.station_ids = {}
+        self.charger_details = []
 
-# Read the text from input file, using the in-built readlines method, to get the whole line in the form of list
-with open("input_2.txt", "r") as input_file:
-    content = input_file.readlines()
+    def read_file(self):
+        # Read the text from input file using the in-built readlines method
+        with open(self.file_path, "r") as input_file:
+            self.content = input_file.readlines()
+        self._clean_content()
 
-print("Original Content:\n", content)
-# Removing \n from each element to make it simpler
-for i in range(len(content)):
-    content[i] = content[i].rstrip()
-print(r"After removing \n:", "\n", content)
-# Remove empty strings from content
-content = [x for x in content if x]
-print("After removing empty strings:\n", content)
+    def _clean_content(self):
+        # Remove \n from each element to make it simpler
+        self.content = [line.rstrip() for line in self.content]
+        # Remove empty strings from content
+        self.content = [line for line in self.content if line]
 
-# Initialize station dictionary that will hold the list of charger id's
-station_ids = dict()
+    def parse_station_ids(self):
+        # Initialize the station dictionary that will hold the list of charger IDs
+        i = 1
+        while self.content[i] != "[Charger Availability Reports]":
+            element = self.content[i].split()  # element is the list of strings
+            temp_list = [int(x) for x in element[1:]]  # Convert charger IDs to integers
+            self.station_ids[int(element[0])] = temp_list
+            i += 1
 
-# Parse the elements till we find the string "[Charger Availability Reports]"
-k, i = 1, 1
-while content[k] != "[Charger Availability Reports]":
-    element = content[i].split()    # element is the list of strings
-    temp_list = []
-    for j in range(1, len(element)):
-        temp_list.append(int(element[j]))
-    station_ids[int(element[0])] = temp_list
-    # update the while increment parameters
-    k += 1
-    i += 1
-print("Printing station dictionary:\n", station_ids)
+    def parse_charger_details(self):
+        # Extract charger details starting after the '[Charger Availability Reports]' section
+        start_index = self.content.index("[Charger Availability Reports]") + 1
+        for line in self.content[start_index:]:
+            element = line.split()  # Split line into individual elements
+            temp_list = []
+            for item in element:
+                # Convert digits to integers, leave other elements as strings
+                temp_list.append(int(item) if item.isdigit() else item)
+            self.charger_details.append(temp_list)
 
-# Initialize a list that will store lists of charger details
-charger_details = []
+    def get_parsed_data(self):
+        # Return parsed station IDs and charger details
+        return self.station_ids, self.charger_details
 
-for l in range(k+1, len(content)):      # 4 -> 7
-    element = content[l].split()       # [1001, 0, 50000, true]
-    temp_list_element = []
-    for item in element:
-        if item.isdigit():
-            temp_list_element.append(int(item))
-        else:
-            temp_list_element.append(item)
-    charger_details.append(temp_list_element)
-print("After extracting charging details:\n", charger_details)
+# Usage example
+if __name__ == "__main__":
+    # Create an instance of the parser class
+    parser = ChargerReportParser("input_1.txt")
 
+    # Read and parse the file
+    parser.read_file()
+    parser.parse_station_ids()
+    parser.parse_charger_details()
+
+    # Get the parsed data
+    parsed_station_ids, parsed_charger_details = parser.get_parsed_data()
+
+    # Print the parsed data (Optional)
+    # print("Station IDs:\n", parsed_station_ids)
+    # print("Charger Details:\n", parsed_charger_details)
