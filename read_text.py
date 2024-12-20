@@ -42,19 +42,19 @@ class ChargerReportParser:
         # Return parsed station IDs and charger details
         return self.station_ids, self.charger_details
 
-# Usage example
-if __name__ == "__main__":
-    # Create an instance of the parser class
-    parser = ChargerReportParser("input_1.txt")
+filename = input("Enter the name of the text file: ")
 
-    # Read and parse the file
-    parser.read_file()
-    parser.parse_station_ids()
-    parser.parse_charger_details()
+# Create an instance of the parser class
+parser = ChargerReportParser(filename)
 
-    # Get the parsed data
-    parsed_station_ids, parsed_charger_details = parser.get_parsed_data()
+# Read and parse the file
+parser.read_file()
+parser.parse_station_ids()
+parser.parse_charger_details()
 
-    # Print the parsed data (Optional)
-    # print("Station IDs:\n", parsed_station_ids)
-    # print("Charger Details:\n", parsed_charger_details)
+# Get the parsed data
+parsed_station_ids, parsed_charger_details = parser.get_parsed_data()
+
+# Print the parsed data (Optional)
+# print("Station IDs:\n", parsed_station_ids)
+# print("Charger Details:\n", parsed_charger_details)
